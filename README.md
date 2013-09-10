@@ -7,4 +7,4 @@ To read this set of slides, [download a zip of the project](https://github.com/n
 
 ##License
 
-This set of slides are licensed under [Creative Commons (CC BY 3.0)](https://creativecommons.org/licenses/by/3.0/).
+The content of the slides are licensed under [Creative Commons (CC BY 3.0)](https://creativecommons.org/licenses/by/3.0/).
