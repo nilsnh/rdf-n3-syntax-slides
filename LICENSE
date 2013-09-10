@@ -1,12 +1,3 @@
-#RDF/XML and N3
-##A light introduction to their syntax
-
-I was tasked with creating a nice introduction on how to write rdf in rdf/xml and Notation3. Thankfully I found [reveal.js](https://github.com/hakimel/reveal.js/) which made it easy to create some slides by sourcing knowledge from w3.org regarding rdf syntax grammar.
-
-
-
-## License
-
 Copyright (C) 2013 Hakim El Hattab, http://hakim.se
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,4 +17,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-

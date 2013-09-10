@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>RDF/XML & Notation3</title>
+
+    <meta name="description" content="An introduction to xml/rdf and notation3">
+    <meta name="author" content="Nils Norman Haukås">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/ir_black.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <style type="text/css">
+    .reveal pre{
+      width:100%;
+    }
+    </style>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <h1>RDF/XML and N3</h1>
+          <h2>A light introduction to their syntax</h2>
+          <p>
+            <small>Created by Nils N. Haukås</small>
+            <small>and licenced under <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons CC BY 3.0</a>.</small>
+          </p>
+        </section>
+
+        <section>
+          <section>
+            <h2>RDF/XML</h2>
+            <pre><code data-trim>
+  <!-- First let's make it easier for ourselves by adding abbreviations -->
+  <rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:homeMadeOnt="http://myBlog.com/homemade-ont/" 
+    xmlns:work="http://someOntologyBase.org/tech-positions#"
+  >
+
+  <!-- Here's an RDF triple. -->
+    <rdf:Description rdf:about="http://someSocialNetwork.com/people#mari">
+      <homeMadeOnt:hasJob rdf:resource="work:sysadmin"/>
+    </rdf:Description>
+
+  <!-- The underlying RDF structure is there -->
+    <rdf:Description rdf:about="subject">
+      <predicate rdf:resource="object"/>
+    </rdf:Description>
+  </rdf:RDF>
+            </code></pre>
+            <p>Note the use of xml namespaces. Click <a href="#" class="navigate-down">down arrow</a> to see translation.</p>
+          </section>
+          <section>
+            <h2>N3</h2>
+            <pre><code class="xml">
+@prefix homeMadeOnt: &lt;http://myBlog.com/homemade-ont/&gt;.
+@prefix work: &lt;http://someOntologyBase.org/tech-positions#&gt;.
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
+
+#With N3 triples become oneliners of subject predicate object
+
+&lt;http://someSocialNetwork.com/people#mari&gt; homeMadeOnt:hasJob work:sysadmin.
+
+# Comments are made using the '#' sign
+            </code>
+            </pre>
+            <p>Click <a href="#" class="navigate-up">up arrow</a> to go back. All the rdf/xml have corresponding N3 translations.</p>
+          </section>
+        </section>  
+
+        <section>
+          <section>
+            <h2>Multiple property elements XML</h2>
+            <pre><code class="xml n3">
+<rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:sns="http://someSocialNetwork.com/people#"
+  >
+
+  <rdf:Description rdf:about="sns:greg">
+    <foaf:knows>
+      <rdf:Description rdf:about="sns:mina"></rdf:Description>
+    </foaf:knows>
+    <foaf:knows>
+      <rdf:Description rdf:about="sns:ole"></rdf:Description>
+    </foaf:knows>
+  </rdf:Description>
+
+</rdf:RDF>
+            </code></pre>
+          </section>
+          <section>
+            <h2>Multiple property elements N3</h2>
+            <pre><code class="xml n3">
+@prefix sns: &lt;http://someSocialNetwork.com/people#&gt;.
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt;.
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
+
+sns:greg foaf:knows sns:mina,
+                  sns:ole.
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Empty property elements XML</h2>
+            <pre><code class="xml">
+<rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:sns="http://someSocialNetwork.com/people#"
+  >
+
+  <rdf:Description rdf:about="sns:greg">
+    <foaf:knows>
+      <rdf:Description rdf:about="sns:ole"></rdf:Description>
+    </foaf:knows>
+    <foaf:knows rdf:resource="sns:mina"></foaf:knows> <!-- Shortened version --> 
+  </rdf:Description>
+
+</rdf:RDF>
+            </code></pre>
+          </section>
+          <section>
+            <h2>Empty property elements N3</h2>
+            <pre><code class="xml n3">
+@prefix sns: &lt;http://someSocialNetwork.com/people#&gt;.
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt;.
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
+
+sns:greg foaf:knows sns:mina,
+                  sns:ole.
+            </code></pre>
+            <p>The corresponding n3 remains the same.</p>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Property attributes XML</h2>
+            <pre><code class="xml">
+<rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:sns="http://someSocialNetwork.com/people#"
+  >
+
+  <rdf:Description rdf:about="sns:greg">
+    <foaf:knows rdf:resource="sns:mina"/>
+    <foaf:name>Greg Doe</foaf:name> <!-- String literals -->
+  </rdf:Description>
+  <rdf:Description rdf:about="sns:jane" foaf:name="Jane Doe"> <!-- can be shortened like so -->
+    <foaf:knows rdf:resource="sns:greg"/> 
+  </rdf:Description>
+
+</rdf:RDF>
+            </code></pre>
+          </section>
+          <section>
+            <h2>Property attributes N3</h2>
+            <pre><code class="xml n3">
+@prefix sns: &lt;http://someSocialNetwork.com/people#&gt;.
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt;.
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
+
+sns:greg foaf:knows sns:mina;
+  foaf:name &quot;Greg Doe&quot;.
+
+sns:jane foaf:knows sns:greg;
+  foaf:name &quot;Jane Doe&quot;.
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>XML literals</h2>
+            <pre><code class="xml">
+<rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:sns="http://someSocialNetwork.com/people#"
+    xmlns:ex="http://someExampleOntology.org/"
+  >
+
+  <rdf:Description rdf:about="sns:greg">
+    <ex:hasPhone rdf:parseType="Literal" xmlns:a="http://phoneXMLNamespace.org/a#">
+      <a:rawContactXML>
+        <a:contact celNum="123 456 78">Jane Doe</a:contact>
+      </a:rawContactXML>
+    </ex:hasPhone>
+  </rdf:Description>
+  
+</rdf:RDF>
+            </code></pre>
+          </section>
+          <section>
+            <h2>XML literals N3</h2>
+            <pre><code class="xml n3">
+@prefix sns: &lt;http://someSocialNetwork.com/people#&gt;.
+@prefix xmlns: &lt;http://www.w3.org/2000/xmlns/&gt;.
+@prefix ex: &lt;http://someExampleOntology.org/&gt;.
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
+
+sns:greg ex:hasPhone &quot;
+  &lt;a:rawContactXML xmlns:a=\&quot;http://phoneXMLNamespace.org/a#\&quot;&gt;
+    &lt;a:contact celNum=\&quot;123 456 78\&quot;&gt;Jane Doe&lt;/a:contact&gt;
+  &lt;/a:rawContactXML&gt; 
+  &quot;^^rdf:XMLLiteral.
+
+#The above can be written in one line
+sns:greg ex:hasPhone &quot;&lt;a:rawContactXML xmlns:a=\&quot;http://phoneXMLNamespace.org/a#\&quot;&gt; &lt;a:contact celNum=\&quot;123 456 78\&quot;&gt;Jane Doe&lt;/a:contact&gt; &lt;/a:rawContactXML&gt; &quot;^^rdf:XMLLiteral.
+
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Typed Literals rdf:datatype</h2>
+            <pre><code class="xml n3">
+<rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:sns="http://someSocialNetwork.com/people#"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  >
+
+  <rdf:Description rdf:about="sns:greg">
+    <foaf:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Greg Doe</foaf:name>
+    <foaf:age rdf:datatype="http://www.w3.org/2001/XMLSchema#int">24</foaf:age>
+  </rdf:Description>
+
+</rdf:RDF>
+            </code></pre>
+          </section>
+          <section>
+            <h2>N3</h2>
+            <pre><code class="xml n3">
+@prefix sns: &lt;http://someSocialNetwork.com/people#&gt;.
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt;.
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
+
+sns:greg foaf:age 24;
+  foaf:name &quot;Greg Doe&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt;.
+            </code></pre>
+          </section>
+        </section>
+
+
+        <section>
+          <section>
+            <h2>Identifying blank nodes - rdf:nodeID</h2>
+            <pre><code class="xml">
+<rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:sns="http://someSocialNetwork.com/people#"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  >
+
+  <rdf:Description rdf:about="sns:greg">
+    <foaf:knows>
+      <rdf:Description rdf:about="sns:john"></rdf:Description>
+    </foaf:knows>
+    <foaf:knows rdf:nodeID="abc"></foaf:knows> <!-- We create a local reference -->
+  </rdf:Description>
+
+  <rdf:Description rdf:nodeID="abc"> <!-- and make a reference to it. -->
+    <foaf:name>Jane Doe</foaf:name>
+    <foaf:homepage>http://jane.blogg.no/</foaf:homepage>
+  </rdf:Description>
+
+</rdf:RDF>
+            </code></pre>
+          </section>
+          <section>
+            <h2>Identifying blank nodes - rdf:nodeID</h2>
+            <pre><code class="xml n3">
+@prefix sns: &lt;http://someSocialNetwork.com/people#&gt;.
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt;.
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
+
+sns:greg foaf:knows sns:john,
+    _:abc.
+
+_:abc foaf:homepage &quot;http://jane.blogg.no/&quot;;
+  foaf:name &quot;Jane Doe&quot;.
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Omiting blank nodes</h2>
+            <pre><code class="xml">
+<rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:sns="http://someSocialNetwork.com/people#"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  >
+  <rdf:Description rdf:about="sns:greg">
+    <!-- This --> 
+    <foaf:knows> 
+      <rdf:Description foaf:name="Jane Doe">
+        <foaf:homepage>http://jane.blogg.no/</foaf:homepage>
+      </rdf:Description>
+    </foaf:knows>
+    <!-- can be written like so, omitting the rdf:description tags -->
+    <foaf:knows rdf:parseType="Resource"> 
+      <foaf:name>John Doe</foaf:name>
+      <foaf:homepage>http://john.blogg.no/</foaf:homepage>  
+    </foaf:knows>
+  </rdf:Description>
+</rdf:RDF>
+            </code></pre>
+          </section>
+          <section>
+            <h2>Omiting blank nodes - N3</h2>
+            <pre><code class="xml n3">
+@prefix sns: &lt;http://someSocialNetwork.com/people#&gt;.
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt;.
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
+
+sns:greg foaf:knows _:bnode136700096,
+    _:bnode800626944.
+_:bnode136700096 foaf:homepage &quot;http://john.blogg.no/&quot;;
+  foaf:name &quot;John Doe&quot;.
+_:bnode800626944 foaf:homepage &quot;http://jane.blogg.no/&quot;;
+  foaf:name &quot;Jane Doe&quot;.
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Omitting nodes, continued</h2>
+            <pre><code class="xml n3">
+<rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:sns="http://someSocialNetwork.com/people#"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  >
+
+  <rdf:Description rdf:about="sns:greg">
+    <foaf:knows rdf:parseType="Resource"> 
+      <foaf:name>John Doe</foaf:name>
+      <foaf:homepage>http://john.blogg.no/</foaf:homepage>  
+    </foaf:knows>
+
+    <!-- yet another abbreviation possibility -->
+    <foaf:knows foaf:name="John Doe" foaf:homepage=" http://john.blogg.no/" />
+
+  </rdf:Description>
+
+</rdf:RDF>
+            </code></pre>
+            <p>Omitting nodes: Property attributes on an empty property element</p>
+          </section>
+          <section>
+            <h2>Omitting nodes, continued - N3</h2>
+            <pre><code class="xml n3">
+@prefix sns: &lt;http://someSocialNetwork.com/people#&gt;.
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt;.
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
+
+#Here Greg knows to people who *might* be the same person.
+
+sns:greg foaf:knows _:bnode1421465472,
+    _:bnode134694720.
+_:bnode134694720 foaf:homepage &quot; http://john.blogg.no/&quot;;
+  foaf:name &quot;John Doe&quot;.
+_:bnode1421465472 foaf:homepage &quot;http://john.blogg.no/&quot;;
+  foaf:name &quot;John Doe&quot;.
+            </code></pre>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Typed node elements</h2>
+            <pre><code>
+<rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:sns="http://someSocialNetwork.com/people#"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  >
+
+  <!-- Statements like this -->
+  <rdf:Description rdf:about="sns:greg">
+    <rdf:type rdf:resource="foaf:Person"></rdf:type> 
+    <foaf:name>Greg Doe</foaf:name>
+  </rdf:Description>
+
+  <!-- may also be written like this -->
+  <foaf:Person rdf:about="sns:jane">
+    <foaf:name>Jane Doe</foaf:name>      
+  </foaf:Person>
+
+</rdf:RDF>
+            </code></pre>
+          </section>
+          <section>
+            <h2>Typed node elements - N3</h2>
+            <pre><code class="xml">
+@prefix sns: &lt;http://someSocialNetwork.com/people#&gt;.
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt;.
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
+
+sns:greg a foaf:Person;
+  foaf:name &quot;Greg Doe&quot;.
+sns:jane a foaf:Person;
+  foaf:name &quot;Jane Doe&quot;.
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Abbreviating URIs with xml:base</h2>
+            <pre><code>
+<!-- With xml:base we defined a new base URL -->
+<rdf:RDF 
+    xml:base="http://newSocialNetwork.com/persons/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:sns="http://someSocialNetwork.com/people#"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  >
+  
+  <!-- which allow for even more abbreviations -->
+  <rdf:Description rdf:ID="Margareth"> 
+    <foaf:knows rdf:resource="Morten"></foaf:knows> 
+    <foaf:knows rdf:resource="sns:Greg"></foaf:knows>
+  </rdf:Description>
+
+</rdf:RDF>
+            </code></pre>
+            <p>These abbreviations are possible for rdf:about, rdf:resource, rdf:ID and rdf:datatype.</p>
+          </section>
+          <section>
+            <h2>Abbreviating URIs with xml:base N3</h2>
+            <pre><code class="xml">
+@prefix sns: &lt;http://someSocialNetwork.com/people#&gt;.
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt;.
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
+
+&lt;http://newsocialnetwork.com/persons/#Margareth&gt; foaf:knows sns:Greg,    
+    &lt;http://newsocialnetwork.com/persons/Morten&gt;.
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <h2>Other RDF/XML tricks</h2>
+          <ul>
+            <li>The <em>&lt;rdf:RDF&gt;&lt;/rdf:RDF&gt;</em> top node may be omited if the remaining rdf/xml has a single top node like <em>&lt;rdf:Description&gt;&lt;/rdf:Description&gt;.</em></li>
+            <li><em>xml:lang=""</em> may be used on any node element or property element to indicate the language.</li>
+            <li>For more info check <a href="http://www.w3.org/TR/rdf-syntax-grammar/" target="_blank">http://www.w3.org/TR/rdf-syntax-grammar/</a>.</li>
+          </ul>
+        </section>
+      </div>
+
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+
+    <script>
+
+
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        width: 1200,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
